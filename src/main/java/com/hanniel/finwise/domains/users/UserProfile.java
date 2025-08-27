@@ -23,8 +23,8 @@ import java.util.UUID;
 @Setter
 @Getter
 public class UserProfile {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -68,4 +68,9 @@ public class UserProfile {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
+    private boolean accountActive = true;
+
+    private LocalDateTime deactivatedAt;
 }
