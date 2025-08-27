@@ -11,7 +11,7 @@ public record RegisterRequest(
         String email,
 
         @NotBlank()
-        @Size()
+        @Size(min=8, message = "Senha precisa ter no mínimo 8 characters")
         String password,
 
         String role
