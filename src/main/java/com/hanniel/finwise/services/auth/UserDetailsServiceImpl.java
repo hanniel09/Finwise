@@ -4,6 +4,7 @@ import com.hanniel.finwise.domains.auth.UserCredentials;
 import com.hanniel.finwise.repositories.auth.UserCredentialsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserCredentialsRepository userCredentialsRepository;
+    private final UserCredentialsRepository userCredentialsRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -26,10 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(
                 new SimpleGrantedAuthority("ROLE_" + user.getRole())
         );
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                authorities
-        );
+        return User.withUsername(user.getEmail())
+                .password(user.getPassword())
+                .authorities("ROLE_" + user.getRole().name())
+                .accountLocked(false)
+                .accountExpired(false)
+                .credentialsExpired(false)
+                .disabled(false)
+                .build();
     }
 }
