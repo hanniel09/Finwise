@@ -46,7 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             boolean valid;
-            if (path.equals("/users/profile")) {
+            if (path.equals("/api/user-profile")) {
                 valid = jwtService.isValidRegistrationToken(token, userDetails);
             } else {
                 valid = jwtService.isValidAccessToken(token, userDetails);
